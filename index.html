@@ -81,7 +81,13 @@
       <dialog class="sample-modal" id="sample-modal">
         <div class="modal-header">
           <div><span>Sample Output</span><strong>Court Scheme — Visual Treatment 01</strong></div>
-          <button id="close-modal" type="button" aria-label="Sample Output schließen">×</button>
+          <div class="modal-actions">
+            <a id="download-sample" class="modal-download" href="./sample-output.mp4" download="MuseVis-Court-Scheme.mp4" aria-label="Sample Output herunterladen">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+              <span>Download</span>
+            </a>
+            <button id="close-modal" type="button" aria-label="Sample Output schließen">×</button>
+          </div>
         </div>
         <video id="sample-video" controls playsinline preload="metadata" poster="./sample-poster.jpg">
           <source src="./sample-output.mp4" type="video/mp4" />

@@ -416,6 +416,10 @@ h1 em {
 .modal-header span { color: var(--cyan); font-size: 8px; font-weight: 700; letter-spacing: .17em; text-transform: uppercase; }
 .modal-header strong { font-size: 12px; font-weight: 590; }
 .modal-header button { width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 50%; background: transparent; cursor: pointer; font-size: 22px; font-weight: 200; }
+.modal-actions { display: flex; flex-direction: row; align-items: center; gap: 12px; }
+.modal-download { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 15px; border: 1px solid var(--line); border-radius: 17px; color: var(--text); background: transparent; text-decoration: none; font-size: 11px; font-weight: 640; letter-spacing: .05em; text-transform: uppercase; transition: border-color .2s, color .2s, background .2s; }
+.modal-download:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(60, 210, 255, .07); }
+.modal-download svg { flex-shrink: 0; }
 .sample-modal video { display: block; width: 100%; max-height: 75vh; border-radius: 0 0 19px 19px; background: #000; }
 
 :focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }

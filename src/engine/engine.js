@@ -43,13 +43,29 @@ const particleVertex = /* glsl */`
     vColor = mix(violet, cyan, seed.z);
     vColor = mix(vColor, vec3(1.15, 1.2, 1.3), clamp(heat * .28, 0.0, .45));
     vColor = mix(vColor, amber, uAmber * (.2 + uImpact * .8) * step(.6, seed.y));
-    vColor += vec3(.25, .4, .55) * uTreble * step(.93, seed.w);
+    // Sparkle only a narrow subset on treble so accents read as glints, not
+    // a full-field brightness blink.
+    vColor += vec3(.25, .4, .55) * uTreble * step(.96, seed.w);
 
+    // Accents are carried mostly by size, not brightness. Only a small onset
+    // of alpha blink remains; the rest of the accent energy grows the points.
     float fade = smoothstep(0.0, .25, pos4.w);
-    vAlpha = (.26 + seed.w * .6 + uOnset * .2) * uVisualGain * fade * uAlphaScale;
+    vAlpha = (.26 + seed.w * .6 + uOnset * .07) * uVisualGain * fade * uAlphaScale;
+
+    // Per-particle accent scaling: each particle reacts to a different band
+    // and at a different threshold, so beats/highs make selected clusters
+    // swell rather than pulsing every point in lockstep.
+    float pick = fract(seed.x * 3.17 + seed.z * 1.91);
+    float beatSwell = uBeat * smoothstep(.35, .95, seed.y) * 1.7;
+    float highSwell = uHigh * step(.62, pick) * 1.5;
+    float impactSwell = uImpact * smoothstep(.5, 1.0, seed.w) * 1.4;
+    float accent = beatSwell + highSwell + impactSwell;
+    // A gentle, non-selective residual keeps a little of the old shimmer.
+    float shimmer = 1.0 + uHigh * .35 + uBeat * .2;
+
     float perspective = 10.0 / max(2.2, -mvPosition.z);
     gl_PointSize = (1.0 + seed.w * 1.9 + heat * 1.3)
-      * (1.0 + uHigh * 1.6 + uBeat * .7) * perspective * uPointScale;
+      * (shimmer + accent) * perspective * uPointScale;
   }
 `;
 

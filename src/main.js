@@ -1,6 +1,7 @@
 import './style.css';
 import { AudioEngine } from './audio.js';
 import { PATTERNS, Visualizer } from './visualizer.js';
+import { EngineV2 } from './engine/engine.js';
 
 const $ = (selector) => document.querySelector(selector);
 const app = $('#app');
@@ -55,12 +56,23 @@ function updatePattern(index, name) {
   patternName.textContent = name;
 }
 
+// Engine V2 (stateful GPU simulation + raymarched environments) is the
+// primary renderer; the original visualizer remains the verified fallback
+// for browsers without WebGL2 float render targets.
+const forceLegacy = new URLSearchParams(window.location.search).get('engine') === 'v1';
 try {
-  visualizer = new Visualizer($('#visual-stage'), updatePattern);
-} catch (error) {
-  showStatus('WebGL konnte nicht gestartet werden. Bitte öffne MuseVis in einem aktuellen Browser.', 0);
-  throw error;
+  if (forceLegacy) throw Object.assign(new Error('Legacy engine requested.'), { engineUnsupported: true });
+  visualizer = new EngineV2($('#visual-stage'), updatePattern);
+} catch (engineError) {
+  console.warn('Engine V2 unavailable, using fallback renderer.', engineError);
+  try {
+    visualizer = new Visualizer($('#visual-stage'), updatePattern);
+  } catch (error) {
+    showStatus('WebGL konnte nicht gestartet werden. Bitte öffne MuseVis in einem aktuellen Browser.', 0);
+    throw error;
+  }
 }
+window.__musevis = { visualizer, audio };
 
 function setPlayingUi(playing) {
   playButton.classList.toggle('paused', !playing);

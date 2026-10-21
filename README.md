@@ -42,3 +42,7 @@ The output in `dist/` is fully static. `vite.config.js` uses relative asset URLs
 3. The workflow in `.github/workflows/deploy-pages.yml` builds and deploys the site on every push to `main`.
 
 The sample media is intentionally included under `public/` and copied into the Pages artifact during the build.
+
+## Development and AI assistance
+
+Small learning or experimental project developed with AI assistance. The default-branch history includes contributions explicitly attributed to Claude ([example](https://github.com/ProfessorEngineergit/MuseVis/commit/43a6d9b9bc155dd08d5c34c6abfea454b56a8c3e)). This documents AI involvement in those contributions; it does not establish the origin of every line or independent validation. Existing author, co-author and session records are retained.
